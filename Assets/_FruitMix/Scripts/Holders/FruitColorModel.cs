@@ -35,7 +35,7 @@ namespace _FruitMix.Scripts.Holders
     {
         Banana,
         Apple,
-        Citrus,
+        Orange,
         RedBerry,
         Tomato,
         Cucumber,

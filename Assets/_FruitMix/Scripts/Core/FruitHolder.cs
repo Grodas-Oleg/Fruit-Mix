@@ -1,4 +1,6 @@
+using _FruitMix.Scripts.EventLayer;
 using _FruitMix.Scripts.Holders;
+using DG.Tweening;
 using UnityEngine;
 
 namespace _FruitMix.Scripts.Core
@@ -6,18 +8,24 @@ namespace _FruitMix.Scripts.Core
     public class FruitHolder : MonoBehaviour
     {
         [SerializeField] private Fruit fruit;
-        
+        [SerializeField] private Rigidbody _rigidbody;
+
+        private Vector3 _startScale;
         public Fruit Fruit => fruit;
-        private Transform _transform;
 
-        private void Awake() => _transform = transform;
+        private void Awake() => _startScale = transform.localScale;
 
-        private void OnMouseDown() => BlenderController.AddFruit(this);
-
-        [ContextMenu("Reset")]
-        private void ResetPosition()
+        private void OnEnable()
         {
-            transform.position = _transform.position;
+            transform.localScale = Vector3.zero;
+            _rigidbody.isKinematic = true;
+            transform.DOScale(_startScale, 1f);
+        }
+
+        private void OnMouseDown()
+        {
+            _rigidbody.isKinematic = false;
+            EventBus.OnFruitSended?.Invoke(this);
         }
     }
 }

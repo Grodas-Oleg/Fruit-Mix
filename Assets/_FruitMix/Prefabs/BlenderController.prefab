@@ -24,7 +24,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 241511939239032458}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.25, z: 0}
+  m_LocalPosition: {x: 0, y: 0.1209, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -43,7 +43,6 @@ GameObject:
   - component: {fileID: 225834443071136902}
   - component: {fileID: 220414919065159970}
   - component: {fileID: 269675764122382390}
-  - component: {fileID: 269675764122382389}
   - component: {fileID: 269675764122382388}
   m_Layer: 0
   m_Name: BlenderController
@@ -132,25 +131,6 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 43133441357394016, guid: b8dd9415aaacfab42a5c35a932e3a950, type: 2}
---- !u!114 &269675764122382389
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 242091474561992874}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6d816f638203444ea2ebb33dc0b905ed, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _limeCocktailRecipeHolder: {fileID: 11400000, guid: f2e29082142d340d8a08312e54e55f15,
-    type: 2}
-  _addedFruits: 010000000000000002000000
-  _requiredColor: {r: 0, g: 0, b: 0, a: 0}
-  _recivedColor: {r: 0, g: 0, b: 0, a: 0}
-  _min: {r: 0, g: 0, b: 0, a: 0}
-  _max: {r: 0, g: 0, b: 0, a: 0}
 --- !u!114 &269675764122382388
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -164,10 +144,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   IsNeedToDontDestroy: 0
-  _renderer: {fileID: 3489461954453908786}
-  _currentAddedFruits: []
-  _blenderLid: {fileID: 5609699135605665046}
-  _jumpEndPoint: {fileID: 241511939239032457}
+  _limeCocktailRecipeHolder: {fileID: 11400000, guid: f2e29082142d340d8a08312e54e55f15,
+    type: 2}
+  _liquidRenderer: {fileID: 3489461954453908786}
+  _requiredColor: {r: 0.58013684, g: 0.88591874, b: 0, a: 1.5}
+  _recivedColor: {r: 0, g: 0, b: 0, a: 0}
+  _currentAddedFruits: 
 --- !u!1 &242324937549969676
 GameObject:
   m_ObjectHideFlags: 0
@@ -418,7 +400,6 @@ GameObject:
   - component: {fileID: 6384227768427505913}
   - component: {fileID: 7442776598965937333}
   - component: {fileID: 3489461954453908786}
-  - component: {fileID: 7442776598965937332}
   m_Layer: 0
   m_Name: SM_Prop_Blender_Jug_01.001
   m_TagString: Untagged
@@ -492,21 +473,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &7442776598965937332
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3389095388008472858}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fd581ca96c0d4b499acf2eae61d0f27, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  MaxWobble: 0.03
-  WobbleSpeed: 1
-  Recovery: 1
 --- !u!1 &5609699135605665046
 GameObject:
   m_ObjectHideFlags: 0

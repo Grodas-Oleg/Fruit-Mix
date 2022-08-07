@@ -22,7 +22,7 @@ namespace _FruitMix.Scripts.UI
             FadeGlobal(false, false, 0.5f);
 
             // _pauseButton.Init(() => SwitchPauseWindow(true));
-            _blendButton.Init(BlenderController.StartBlend);
+            _blendButton.Init(() => EventBus.OnBlend?.Invoke());
 
             EventBus.OnFruitAdded += SwitchBlendButton;
             EventBus.OnBlend += SwitchBlendButton;
@@ -34,7 +34,7 @@ namespace _FruitMix.Scripts.UI
             // }
         }
 
-        public static void SwitchBlendButton()
+        private static void SwitchBlendButton()
         {
             if (BlenderController.Instance.CurrentAddedFruits.Count > 0)
             {

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using _FruitMix.Scripts.EventLayer;
@@ -10,54 +11,108 @@ namespace _FruitMix.Scripts.Core
 {
     public class BlenderController : Singleton<BlenderController>
     {
-        [SerializeField] private Renderer _renderer;
-        [SerializeField] private List<FruitHolder> _currentAddedFruits;
-        [SerializeField] private GameObject _blenderLid;
-        [SerializeField] private Transform _jumpEndPoint;
+        private const float MAX_FILL = .66f;
+        private const float MIN_FILL = .58f;
 
-        public List<FruitHolder> CurrentAddedFruits => _currentAddedFruits;
-        private Color _recivedColor;
-        private Sequence _sequence;
+        [SerializeField] private CocktailRecipeHolder _limeCocktailRecipeHolder;
+
+        [Space] [SerializeField] private Renderer _liquidRenderer;
+        [SerializeField] private Color _requiredColor;
+        [SerializeField] private Color _recivedColor;
+
+        [Space] [SerializeField] private List<Fruit> _currentAddedFruits;
+
+        public List<Fruit> CurrentAddedFruits => _currentAddedFruits;
+        public static event Action<Color> OnRequiredColorChanged;
 
         private static readonly int SideColor = Shader.PropertyToID("_SideColor");
         private static readonly int TopColor = Shader.PropertyToID("_TopColor");
+        private static readonly int Fill = Shader.PropertyToID("_Fill");
 
-        public static void AddFruit(FruitHolder fruit)
+        protected override void OnAwake()
         {
-            Instance._currentAddedFruits.Add(fruit);
-            AnimationSequence(fruit);
+            _liquidRenderer.material.SetFloat(Fill, MIN_FILL);
+
+            EventBus.OnBlend += StartBlend;
+        }
+
+        private void Start() => _requiredColor = GetRequiredColor();
+
+        public void AddFruit(Fruit fruit)
+        {
+            _currentAddedFruits.Add(fruit);
             EventBus.OnFruitAdded?.Invoke();
+        }
+
+        public Color GetRequiredColor()
+        {
+            var colors = _limeCocktailRecipeHolder.Fruits
+                .Select(fruit => FruitColorModel.I.GetFruitColor(fruit))
+                .ToList();
+
+            _requiredColor = ColorMixer.GetMixedColor(colors);
+
+            OnRequiredColorChanged?.Invoke(_requiredColor);
+            return _requiredColor;
         }
 
         private void SetLiquidColor(Color color)
         {
-            _renderer.material.SetColor(SideColor, color);
-            _renderer.material.SetColor(TopColor, color);
+            _liquidRenderer.material.DOColor(color, SideColor, 5f);
+            _liquidRenderer.material.DOColor(color, TopColor, 5f);
+            _liquidRenderer.material.DOFloat(MAX_FILL, Fill, 5f)
+                .OnComplete(CompareColors);
         }
 
-        private static void AnimationSequence(FruitHolder fruitHolder)
+        private void StartBlend()
         {
-            Instance._sequence = DOTween.Sequence()
-                .AppendCallback(() => Instance._blenderLid.transform.DOLocalRotate(new Vector3(0, 0, -90), 1f))
-                .AppendCallback(() =>
-                {
-                    fruitHolder.transform.DOJump(Instance._jumpEndPoint.position, .3f, 1, 1.5f).SetEase(Ease.InQuart);
-                    Instance.transform.DOShakePosition(3f, .01f);
-                });
-        }
-
-        public static void StartBlend()
-        {
-            var list = Instance._currentAddedFruits
-                .Select(fruitHolder => FruitColorModel.I.GetFruitColor(fruitHolder.Fruit))
+            var colors = _currentAddedFruits
+                .Select(fruit => FruitColorModel.I.GetFruitColor(fruit))
                 .ToList();
-            foreach (var color in list) Instance._recivedColor += color;
-            Instance._recivedColor /= list.Count;
-
-            Instance.SetLiquidColor(Instance._recivedColor);
-
-            Instance._currentAddedFruits.Clear();
-            EventBus.OnBlend?.Invoke();
+            _recivedColor = ColorMixer.GetMixedColor(colors);
+            _currentAddedFruits.Clear();
+            SetLiquidColor(_recivedColor);
         }
+
+        public void Reset()
+        {
+            _liquidRenderer.material.DOColor(Color.white, SideColor, 0f);
+            _liquidRenderer.material.DOColor(Color.white, TopColor, 0f);
+            _liquidRenderer.material.DOFloat(MIN_FILL, Fill, 0);
+        }
+
+        private void CompareColors()
+        {
+            var thresholdPercent = new Color(_requiredColor.r * .1f, _requiredColor.g * .1f, _requiredColor.b * .1f);
+
+            var minThreshold = new Color(
+                _requiredColor.r - thresholdPercent.r,
+                _requiredColor.g - thresholdPercent.g,
+                _requiredColor.b - thresholdPercent.b);
+
+            var maxThreshold = new Color(
+                _requiredColor.r + thresholdPercent.r,
+                _requiredColor.g + thresholdPercent.g,
+                _requiredColor.b + thresholdPercent.b);
+
+            if (_recivedColor.r >= minThreshold.r &&
+                _recivedColor.g >= minThreshold.g &&
+                _recivedColor.b >= minThreshold.b)
+            {
+                EventBus.OnBlendComplete?.Invoke(true);
+            }
+            else if (_recivedColor.r <= maxThreshold.r &&
+                     _recivedColor.g <= maxThreshold.g &&
+                     _recivedColor.b <= maxThreshold.b)
+            {
+                EventBus.OnBlendComplete?.Invoke(true);
+            }
+            else
+            {
+                EventBus.OnBlendComplete?.Invoke(false);
+            }
+        }
+
+        private void OnDestroy() => EventBus.OnBlend -= StartBlend;
     }
 }
