@@ -63,6 +63,7 @@ namespace _FruitMix.Scripts.Core
 
         private void SetLiquidColor(Color color)
         {
+            transform.DOShakePosition(5f, .003f);
             _liquidRenderer.material.DOColor(color, SideColor, 5f);
             _liquidRenderer.material.DOColor(color, TopColor, 5f);
             _liquidRenderer.material.DOFloat(MAX_FILL, Fill, 5f)

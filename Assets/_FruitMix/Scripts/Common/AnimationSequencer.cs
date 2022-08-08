@@ -42,7 +42,7 @@ namespace _FruitMix.Scripts.Common
                 fruitHolder.transform.DOJump(_jumpPoint.position, .3f, 1, 1.5f).SetEase(Ease.InQuart)
                     .OnComplete(() =>
                     {
-                        _blender.transform.DOShakePosition(3f, .005f);
+                        _blender.transform.DOShakePosition(2f, .003f);
                         _blender.AddFruit(fruitHolder.Fruit);
                     });
             });
