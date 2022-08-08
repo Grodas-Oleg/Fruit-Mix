@@ -29,11 +29,13 @@ namespace _FruitMix.Scripts.Common
         private void Action(bool flag)
         {
             ShowUI(false);
+            
             _animator.Play(flag ? Success : Fail);
+            
             DOVirtual.DelayedCall(flag ? SUCCESS_TIME : FAIL_TIME + DELAY,
                 () =>
                 {
-                    ScreenFade.Fade(() => EventBus.OnNextScene?.Invoke());
+                    ScreenFade.Fade(() => EventBus.OnNextScene?.Invoke(flag));
                     ShowUI(true);
                 });
         }

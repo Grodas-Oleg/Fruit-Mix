@@ -14,13 +14,17 @@ namespace _FruitMix.Scripts.UI
 
         protected Sequence _animationSequence;
         protected Tween _hiderTween;
+        protected bool _isShowed;
 
         public virtual void Show(bool force = false)
         {
+            if (_isShowed) return;
+
             _animationSequence?.Kill();
 
             _canvasGroup.alpha = 0f;
 
+            _isShowed = true;
             HiderFade(true);
 
             if (force)
@@ -40,7 +44,11 @@ namespace _FruitMix.Scripts.UI
 
         public void Hide(bool force = false)
         {
+            if (!_isShowed) return;
+
             _animationSequence?.Kill();
+
+            _isShowed = false;
 
             _canvasGroup.interactable = false;
 

@@ -9,11 +9,9 @@ namespace _FruitMix.Scripts.UI
         [SerializeField] private Button _button;
         private UnityAction _actionTemp;
         private void Awake() => _button.onClick.AddListener(() => _actionTemp?.Invoke());
-
         public void Init(UnityAction callback) => _actionTemp = callback;
 
         public void SwitchInteractable(bool flag) => _button.interactable = flag;
-        protected override void OnDisable() => _actionTemp = null;
 
         public override void Init(params object[] parameters)
         {

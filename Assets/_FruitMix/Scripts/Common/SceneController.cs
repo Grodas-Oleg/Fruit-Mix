@@ -9,24 +9,29 @@ namespace _FruitMix.Scripts.Common
     public class SceneController : MonoBehaviour
     {
         [SerializeField] private List<CocktailRecipeHolder> _recipies;
-
         private int _currentSceneIndex;
 
         private void Start()
         {
-            NextScene();
+            NextScene(false);
 
             EventBus.OnNextScene += NextScene;
+            EventBus.OnBlend += OnBlend;
         }
 
-        private void NextScene()
-        {
-            BlenderController.SetNewRecipe(_recipies[_currentSceneIndex]);
+        private void OnBlend() => FruitSpawner.Instance.gameObject.SetActive(false);
 
-            if (_currentSceneIndex <= _recipies.Count - 1)
+
+        private void NextScene(bool flag)
+        {
+            if (flag)
+            {
                 _currentSceneIndex++;
-            else
-                _currentSceneIndex = 0;
+                if (_currentSceneIndex > _recipies.Count - 1) _currentSceneIndex = 0;
+            }
+
+            BlenderController.SetNewRecipe(_recipies[_currentSceneIndex]);
+            FruitSpawner.Instance.gameObject.SetActive(true);
         }
 
         private void OnDestroy() => EventBus.OnNextScene -= NextScene;

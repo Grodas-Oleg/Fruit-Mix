@@ -9,7 +9,7 @@ namespace _FruitMix.Scripts.EventLayer
         public static UnityAction OnFruitAdded;
         public static UnityAction OnBlend;
         public static UnityAction<bool> OnBlendComplete;
-        public static UnityAction OnNextScene;
+        public static UnityAction<bool> OnNextScene;
 
         static EventBus()
         {

@@ -4,17 +4,18 @@ using System.Linq;
 using _FruitMix.Scripts.Common;
 using _FruitMix.Scripts.EventLayer;
 using _FruitMix.Scripts.Holders;
+using _FruitMix.Scripts.Utilities;
 using DG.Tweening;
 using Lean.Pool;
 using UnityEngine;
 
 namespace _FruitMix.Scripts.Core
 {
-    public class FruitSpawner : MonoBehaviour
+    public class FruitSpawner : Singleton<FruitSpawner>
     {
         [SerializeField] private List<FruitSpawnerContainer> _spawnerContainers;
 
-        private void Awake()
+        protected override void OnAwake()
         {
             foreach (var fruitSpawnerContainer in _spawnerContainers)
             {
