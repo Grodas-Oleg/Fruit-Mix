@@ -19,8 +19,8 @@ namespace _FruitMix.Scripts.Core
         {
             foreach (var fruitSpawnerContainer in _spawnerContainers)
             {
-                var fruit = fruitSpawnerContainer.Pool.Spawn(fruitSpawnerContainer.Transform.position,
-                    Quaternion.identity, transform);
+                var fruit = fruitSpawnerContainer.Pool.Spawn(fruitSpawnerContainer.Pool.transform.position,
+                    fruitSpawnerContainer.Pool.transform.rotation, transform);
                 fruitSpawnerContainer.SetLastSpawnedFruit(fruit);
             }
 
@@ -37,8 +37,8 @@ namespace _FruitMix.Scripts.Core
                 {
                     fruitSpawnerContainer.SpawnedFruits.Add(fruitSpawnerContainer.LastSpawnedFruit);
 
-                    var fruit = fruitSpawnerContainer.Pool.Spawn(fruitSpawnerContainer.Transform.position,
-                        Quaternion.identity, transform);
+                    var fruit = fruitSpawnerContainer.Pool.Spawn(fruitSpawnerContainer.Pool.transform.position,
+                        fruitSpawnerContainer.Pool.transform.rotation, transform);
 
                     fruitSpawnerContainer.SetLastSpawnedFruit(fruit);
                 }
@@ -47,14 +47,10 @@ namespace _FruitMix.Scripts.Core
 
         private void DespawnAllUsedFruits()
         {
-            foreach (var fruitSpawnerContainer in _spawnerContainers)
+            foreach (var fruitSpawnerContainer in _spawnerContainers.Where(fruitSpawnerContainer =>
+                fruitSpawnerContainer.SpawnedFruits.Count > 0))
             {
-                if (fruitSpawnerContainer.SpawnedFruits.Count <= 0) continue;
-
-                foreach (var go in fruitSpawnerContainer.SpawnedFruits)
-                {
-                    fruitSpawnerContainer.Pool.Despawn(go);
-                }
+                foreach (var go in fruitSpawnerContainer.SpawnedFruits) fruitSpawnerContainer.Pool.Despawn(go);
 
                 fruitSpawnerContainer.SpawnedFruits.Clear();
             }
@@ -71,13 +67,17 @@ namespace _FruitMix.Scripts.Core
     public class FruitSpawnerContainer
     {
         [SerializeField] private Fruit _fruit;
+
         [SerializeField] private LeanGameObjectPool _pool;
-        [SerializeField] private Transform _transform;
+
+        // [SerializeField] private Transform _transform;
         [SerializeField] private List<GameObject> _spawnedFruits;
         [SerializeField] private GameObject _lastSpawnedFruit;
         public Fruit Fruit => _fruit;
+
         public LeanGameObjectPool Pool => _pool;
-        public Transform Transform => _transform;
+
+        // public Transform Transform => _transform;
         public List<GameObject> SpawnedFruits => _spawnedFruits;
         public GameObject LastSpawnedFruit => _lastSpawnedFruit;
 

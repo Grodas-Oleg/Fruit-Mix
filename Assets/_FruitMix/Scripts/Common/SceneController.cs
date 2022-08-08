@@ -9,6 +9,7 @@ namespace _FruitMix.Scripts.Common
     public class SceneController : MonoBehaviour
     {
         [SerializeField] private List<CocktailRecipeHolder> _recipies;
+
         private int _currentSceneIndex;
 
         private void Start()
@@ -28,6 +29,7 @@ namespace _FruitMix.Scripts.Common
             {
                 _currentSceneIndex++;
                 if (_currentSceneIndex > _recipies.Count - 1) _currentSceneIndex = 0;
+                EventBus.OnNextLevel?.Invoke(_currentSceneIndex);
             }
 
             BlenderController.SetNewRecipe(_recipies[_currentSceneIndex]);

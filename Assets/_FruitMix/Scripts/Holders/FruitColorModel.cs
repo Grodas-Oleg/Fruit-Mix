@@ -25,7 +25,6 @@ namespace _FruitMix.Scripts.Holders
     {
         [SerializeField] private Fruit fruit;
         [SerializeField] private Color _color;
-        public Color GetColor(Fruit fruit) => this.fruit.Equals(fruit) ? _color : default;
         public Fruit Fruit => fruit;
         public Color Color => _color;
     }
@@ -36,9 +35,9 @@ namespace _FruitMix.Scripts.Holders
         Banana,
         Apple,
         Orange,
-        RedBerry,
+        Cherry,
         Tomato,
-        Cucumber,
+        Broccoli,
         Eggplant
     }
 }

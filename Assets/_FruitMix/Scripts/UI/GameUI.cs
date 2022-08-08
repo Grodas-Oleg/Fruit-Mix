@@ -9,52 +9,46 @@ namespace _FruitMix.Scripts.UI
 {
     public class GameUI : Singleton<GameUI>
     {
-        // [SerializeField] private BaseView _startWindow;
-        // [SerializeField] private BaseView _pauseWindow;
-        // [SerializeField] private ButtonView _pauseButton;
+        [SerializeField] private BaseView _startWindow;
+        [SerializeField] private BaseView _pauseWindow;
+        [SerializeField] private ButtonView _pauseButton;
         [SerializeField] private ButtonView _blendButton;
         [SerializeField] private Image _globalHider;
-
-        // private void Start() => _pauseWindow.Hide();
 
         protected override void OnAwake()
         {
             FadeGlobal(false, false, 0.5f);
 
-            // _pauseButton.Init(() => SwitchPauseWindow(true));
+            _pauseButton.Init(() => SwitchPauseWindow(true));
             _blendButton.Init(() => EventBus.OnBlend?.Invoke());
 
             EventBus.OnFruitAdded += SwitchBlendButton;
             EventBus.OnBlend += SwitchBlendButton;
 
-            // if (!EventBus.isFirstLaunch.Value)
-            // {
-            //     _startWindow.Show(true);
-            //     EventBus.isFirstLaunch.Publish(true);
-            // }
+            if (!EventBus.isFirstLaunch.Value)
+            {
+                _startWindow.Show(true);
+                EventBus.isFirstLaunch.Publish(true);
+            }
         }
 
         private static void SwitchBlendButton()
         {
             if (BlenderController.Instance.CurrentAddedFruits.Count > 0)
-            {
                 Instance._blendButton.Show();
-            }
             else
-            {
                 Instance._blendButton.Hide();
-            }
         }
 
-        // public void HideStartWindow() => _startWindow.Hide();
-        //
-        // public void SwitchPauseWindow(bool flag)
-        // {
-        //     if (flag)
-        //         _pauseWindow.Show();
-        //     else
-        //         _pauseWindow.Hide();
-        // }
+        public static void HideStartWindow() => Instance._startWindow.Hide();
+
+        public static void SwitchPauseWindow(bool flag)
+        {
+            if (flag)
+                Instance._pauseWindow.Show();
+            else
+                Instance._pauseWindow.Hide();
+        }
 
         private void FadeGlobal(bool @in, bool force, float delay = 0f, float fadeTime = 0.75f)
         {

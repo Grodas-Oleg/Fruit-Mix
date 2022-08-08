@@ -89,7 +89,8 @@ namespace _FruitMix.Scripts.Core
 
         private void CompareColors()
         {
-            var thresholdPercent = new Color(_requiredColor.r * .1f, _requiredColor.g * .1f, _requiredColor.b * .1f);
+            var thresholdPercent =
+                new Color(_requiredColor.r * .1f, _requiredColor.g * .1f, _requiredColor.b * .1f);
 
             var minThreshold = new Color(
                 _requiredColor.r - thresholdPercent.r,
