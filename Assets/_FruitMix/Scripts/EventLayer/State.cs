@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine.Events;
 
-namespace _DunkBall.Scripts.EventLayer
+namespace _FruitMix.Scripts.EventLayer
 {
     public class State<T>
     {

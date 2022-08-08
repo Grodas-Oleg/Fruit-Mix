@@ -1,4 +1,4 @@
-using _FruitMix.Scripts.Core;
+using _FruitMix.Scripts.Common;
 using UnityEngine.Events;
 
 namespace _FruitMix.Scripts.EventLayer

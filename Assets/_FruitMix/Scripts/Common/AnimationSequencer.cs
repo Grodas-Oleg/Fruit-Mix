@@ -1,9 +1,10 @@
+using _FruitMix.Scripts.Core;
 using _FruitMix.Scripts.EventLayer;
 using _FruitMix.Scripts.Utilities;
 using DG.Tweening;
 using UnityEngine;
 
-namespace _FruitMix.Scripts.Core
+namespace _FruitMix.Scripts.Common
 {
     public class AnimationSequencer : Singleton<AnimationSequencer>
     {

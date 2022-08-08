@@ -3,7 +3,7 @@ using _FruitMix.Scripts.Holders;
 using DG.Tweening;
 using UnityEngine;
 
-namespace _FruitMix.Scripts.Core
+namespace _FruitMix.Scripts.Common
 {
     public class FruitHolder : MonoBehaviour
     {

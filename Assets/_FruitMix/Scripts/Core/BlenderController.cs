@@ -14,7 +14,7 @@ namespace _FruitMix.Scripts.Core
         private const float MAX_FILL = .66f;
         private const float MIN_FILL = .58f;
 
-        [SerializeField] private CocktailRecipeHolder _limeCocktailRecipeHolder;
+        [SerializeField] private CocktailRecipeHolder _cocktailRecipeHolder;
 
         [Space] [SerializeField] private Renderer _liquidRenderer;
         [SerializeField] private Color _requiredColor;
@@ -36,17 +36,22 @@ namespace _FruitMix.Scripts.Core
             EventBus.OnBlend += StartBlend;
         }
 
-        private void Start() => _requiredColor = GetRequiredColor();
-
         public void AddFruit(Fruit fruit)
         {
             _currentAddedFruits.Add(fruit);
             EventBus.OnFruitAdded?.Invoke();
         }
 
+        public static void SetNewRecipe(CocktailRecipeHolder recipeHolder)
+        {
+            Instance.ResetBlender();
+            Instance._cocktailRecipeHolder = recipeHolder;
+            Instance._requiredColor = Instance.GetRequiredColor();
+        }
+
         public Color GetRequiredColor()
         {
-            var colors = _limeCocktailRecipeHolder.Fruits
+            var colors = _cocktailRecipeHolder.Fruits
                 .Select(fruit => FruitColorModel.I.GetFruitColor(fruit))
                 .ToList();
 
@@ -74,8 +79,9 @@ namespace _FruitMix.Scripts.Core
             SetLiquidColor(_recivedColor);
         }
 
-        public void Reset()
+        private void ResetBlender()
         {
+            _recivedColor = Color.white;
             _liquidRenderer.material.DOColor(Color.white, SideColor, 0f);
             _liquidRenderer.material.DOColor(Color.white, TopColor, 0f);
             _liquidRenderer.material.DOFloat(MIN_FILL, Fill, 0);
